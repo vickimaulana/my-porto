@@ -2,7 +2,7 @@
 session_start();
 ob_start();
 include 'koneksi.php';
-if(empty($_SESSION['ID_USER'])){
+if (empty($_SESSION['ID_USER'])) {
   header("location:index.php?access=failed");
 }
 ?>
@@ -19,7 +19,7 @@ if(empty($_SESSION['ID_USER'])){
   <meta content="" name="description">
   <meta content="" name="keywords">
 
- <?php include 'inc/css.php' ?>
+  <?php include 'inc/css.php' ?>
 
   <!-- =======================================================
   * Template Name: NiceAdmin
@@ -29,10 +29,10 @@ if(empty($_SESSION['ID_USER'])){
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
 
-    <link rel="stylesheet" href="assets/js/tagify/tagify.css">
+  <link rel="stylesheet" href="assets/js/tagify/tagify.css">
 </head>
 
 
@@ -40,61 +40,59 @@ if(empty($_SESSION['ID_USER'])){
 <body>
 
   <!-- ======= Header ======= -->
-<?php include 'inc/header.php' ?>
+  <?php include 'inc/header.php' ?>
 
   <!-- ======= Sidebar ======= -->
-<?php include 'inc/sidebar.php' ?>
-  
+  <?php include 'inc/sidebar.php' ?>
+
 
   <main id="main" class="main">
-     <?php
-     if(isset($_GET['page'])){
-        if (file_exists('content/'.$_GET['page']. ".php")) {
-          include 'content/' . $_GET['page'] . '.php';        
-     } else { 
+    <?php
+    if (isset($_GET['page'])) {
+      if (file_exists('content/' . $_GET['page'] . ".php")) {
+        include 'content/' . $_GET['page'] . '.php';
+      } else {
         include 'content/notfound.php';
-          }
-        } else {
-          include 'content/dashboard.php';
-     }
-     ?>
-   
+      }
+    } else {
+      include 'content/dashboard.php';
+    }
+    ?>
+
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
-<?php include 'inc/footer.php' ?>
-  
+  <?php include 'inc/footer.php' ?>
+
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-  
+
   <!-- Vendor JS Files -->
-<?php include 'inc/js.php' ?>
-<script src="assets/js/tagify/tagify.js"></script>
+  <?php include 'inc/js.php' ?>
+  <script src="assets/js/tagify/tagify.js"></script>
 
-<script>
-    var input= document.querySelector('#tags');
+  <script>
+    var input = document.querySelector('#tags');
     new Tagify(input);
-</script>
-<script>
-        $('#tags').inputTags();
-
-        $('#summernote').summernote();
-        $('#summernote').summernote({
-            placeholder: 'Hello stand alone ui',
-            tabsize: 2,
-            height: 120,
-            toolbar: [
-                ['style', ['style']],
-                ['font', ['bold', 'underline', 'clear']],
-                ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['table', ['table']],
-                ['insert', ['link', 'picture', 'video']],
-                ['view', ['fullscreen', 'codeview', 'help']]
-            ]
-        });
-    </script>
+  </script>
+  <script>
+    $('#summernote').summernote();
+    $('#summernote').summernote({
+      placeholder: 'Hello stand alone ui',
+      tabsize: 2,
+      height: 120,
+      toolbar: [
+        ['style', ['style']],
+        ['font', ['bold', 'underline', 'clear']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['table', ['table']],
+        ['insert', ['link', 'picture', 'video']],
+        ['view', ['fullscreen', 'codeview', 'help']]
+      ]
+    });
+  </script>
 
 </body>
 

@@ -5,25 +5,25 @@ include 'koneksi.php';
 // jika email dan password terisi maka 
 // tampilkan atau pilih semua data dari table users dimana emailnya adalah
 // email yang diambil dari user input email 
-if($_SERVER['REQUEST_METHOD'] == "POST") {
-    $email = $_POST['email'];
-    $_password = $_POST['password'];
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+  $email = $_POST['email'];
+  $_password = $_POST['password'];
 
-    $query = mysqli_query($koneksi, "SELECT * FROM users WHERE email='$email'");
-    // jika emailnya bernilai / atau ada
-    if(mysqli_num_rows($query) == 1){
-        $row = mysqli_fetch_assoc($query);
-        if($_password == $row['password']){
-            $_SESSION['ID_USER'] = $row['id'];
-            $_SESSION['NAME'] = $row['name'];
-            header("location:home.php");
-        }else{
-           header("location:index.php?error=password");
-        }
+  $query = mysqli_query($koneksi, "SELECT * FROM users WHERE email='$email'");
+  // jika emailnya bernilai / atau ada
+  if (mysqli_num_rows($query) == 1) {
+    $row = mysqli_fetch_assoc($query);
+    if ($_password == $row['password']) {
+      $_SESSION['ID_USER'] = $row['id'];
+      $_SESSION['NAME'] = $row['name'];
+      header("location:home.php");
     } else {
-           header("location:index.php?error=email");
-
-}}
+      header("location:index.php?error=password");
+    }
+  } else {
+    header("location:index.php?error=email");
+  }
+}
 
 
 ?>
@@ -93,15 +93,15 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
                     <p class="text-center small">Enter your email & password to login</p>
                   </div>
 
-                <?php
-                if(isset($_GET['error'])){
-                    if($_GET['error'] == 'password'){
-                        echo '<div class="alert alert-danger">Password salah!!</div>';
-                    } elseif ($_GET['error'] == 'email') {   
-                        echo '<div class="alert alert-danger">Email tidak ditemukan!!</div>';
+                  <?php
+                  if (isset($_GET['error'])) {
+                    if ($_GET['error'] == 'password') {
+                      echo '<div class="alert alert-danger">Password salah!!</div>';
+                    } elseif ($_GET['error'] == 'email') {
+                      echo '<div class="alert alert-danger">Email tidak ditemukan!!</div>';
                     }
-                }
-                ?>
+                  }
+                  ?>
 
                   <form method="post" class="row g-3 needs-validation" novalidate>
 
