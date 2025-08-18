@@ -45,8 +45,8 @@
           </a>
         </li>
         <li>
-          <a href="components-carousel.html">
-            <i class="bi bi-circle"></i><span>Carousel</span>
+          <a href="?page=resume">
+            <i class="bi bi-circle"></i><span>Resume</span>
           </a>
         </li>
         <li>
