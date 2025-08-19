@@ -4,48 +4,74 @@
 $querySetting = mysqli_query($koneksi, "SELECT * FROM settings LIMIT 1");
 $row = mysqli_fetch_assoc($querySetting);
 
-if (isset($_POST['simpan'])) {
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-    $address = $_POST['address'];
-    $ig = $_POST['instagram'];
-    $fb = $_POST['facebook'];
-    $twitter = $_POST['twitter'];
-    $linkedin = $_POST['linkedin'];
-    $logo_name = $row['logo'] ?? '';
+function uploadImage($file, $row = [], $field = 'logo', $uploadDir = "uploads/")
+{
+    // Pastikan ada file yang diupload
+    if (!empty($file['name'])) {
+        // Buat folder kalau belum ada
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
 
-    // jika gambar terupload
-    if (!empty($_FILES['logo']['name'])) {
-        $logo = $_FILES['logo']['name'];
-        $path = "uploads/";
-        if (!is_dir($path)) mkdir($path);
+        // Buat nama unik (timestamp + nama asli)
+        $fileName   = time() . "-" . basename($file['name']);
+        $targetFile = $uploadDir . $fileName;
 
-        $logo_name = time() . "-" . basename($logo);
-        $target_file = $path . $logo_name;
-        if (move_uploaded_file($_FILES['logo']['tmp_name'], $target_file)) {
-            // jika gambarnya ada maka gambar sebelumnya akan diganti oleh gambar baru
-            if (!empty($row['logo'])) {
-                unlink($path . $row['logo']);
+        // Upload file
+        if (move_uploaded_file($file['tmp_name'], $targetFile)) {
+            // Hapus file lama kalau ada
+            if (!empty($row[$field]) && file_exists($uploadDir . $row[$field])) {
+                unlink($uploadDir . $row[$field]);
             }
+
+            return $fileName; // kembalikan nama file baru
         }
     }
 
+    return $row[$field] ?? null; // kalau tidak upload, pakai nama lama
+}
 
+
+if (isset($_POST['simpan'])) {
+    $email    = $_POST['email'];
+    $phone    = $_POST['phone'];
+    $address  = $_POST['address'];
+    $ig       = $_POST['instagram'];
+    $fb       = $_POST['facebook'];
+    $twitter  = $_POST['twitter'];
+    $linkedin = $_POST['linkedin'];
+
+    // Gunakan fungsi upload
+    $logo_name = uploadImage($_FILES['logo'], $row, 'logo');
+    $image_bg  = uploadImage($_FILES['image'], $row, 'image');
 
     if ($row) {
         // update
-
         $id_setting = $row['id'];
-        $update = mysqli_query($koneksi, " UPDATE settings SET email='$email', phone='$phone', logo='$logo_name', address='$address', ig='$ig', fb='$fb', twitter='$twitter', linkedin='$linkedin' WHERE id='$id_setting'");
+        $update = mysqli_query($koneksi, "UPDATE settings 
+                    SET email='$email', 
+                        phone='$phone', 
+                        logo='$logo_name', 
+                        image='$image_bg', 
+                        address='$address', 
+                        ig='$ig', 
+                        fb='$fb', 
+                        twitter='$twitter', 
+                        linkedin='$linkedin' 
+                    WHERE id='$id_setting'");
         if ($update) {
             header("location:?page=setting&ubah=berhasil");
+            exit;
         }
     } else {
-        //insert
-        $insert = mysqli_query($koneksi, "INSERT INTO settings (email, phone, logo, address, ig, fb, twitter, linkedin)
-        VALUES ('$email','$phone','$logo_name','$address','$ig','$fb', '$twitter', '$linkedin')");
+        // insert
+        $insert = mysqli_query($koneksi, "INSERT INTO settings 
+                (email, phone, logo, image, address, ig, fb, twitter, linkedin) 
+                VALUES 
+                ('$email','$phone','$logo_name','$image_bg','$address','$ig','$fb','$twitter','$linkedin')");
         if ($insert) {
             header("location:?page=setting&tambah=berhasil");
+            exit;
         }
     }
 }
@@ -100,6 +126,15 @@ if (isset($_POST['simpan'])) {
                                 <input type="file" name="logo"><img class='mt-2' src="uploads/<?php echo isset($row['logo']) ? $row['logo'] : '' ?>" alt="logo" width="100" class="form-control">
                             </div>
                         </div>
+                         <!-- Background Image -->
+                        <div class="mb-3 row">
+                            <div class="col-sm-2">
+                                <label for="" class="form-label fw-bold">Background Image</label>
+                            </div>
+                            <div class="col-sm-10">
+                                <input type="file" name="image"><img class='mt-2' src="uploads/<?php echo isset($row['image']) ? $row['image'] : '' ?>" alt="bg-image" width="100" class="form-control">
+                            </div>
+                        </div>
                         <!-- Twitter -->
                         <div class="mb-3 row">
                             <div class="col-sm-2">
@@ -140,6 +175,7 @@ if (isset($_POST['simpan'])) {
                         <div class="mb-3 row">
                             <div class="col-sm-2">
                                 <button class="btn btn-primary" name="simpan">Simpan</button>
+                                <a href="?page=setting" class="text-muted">Kembali</a>
                             </div>
                         </div>
                     </form>

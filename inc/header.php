@@ -9,12 +9,12 @@
 
      <nav id="navmenu" class="navmenu">
        <ul>
-         <li><a href="#hero" class="active">Home</a></li>
-         <li class="dropdown"><a href="?page=about"><span>About</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+         <li><a href="index.php" class="active">Home</a></li>
+         <li class="dropdown"><a href="?page=about"><span>About</span> </a>
            <ul>
-             <li><a href="team.html">Team</a></li>
-             <li><a href="testimonials.html">Testimonials</a></li>
-             <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+             <!-- <li><a href="team.html">Team</a></li> -->
+             <!-- <li><a href="?page=testimonials">Testimonials</a></li> -->
+             <!-- <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
                <ul>
                  <li><a href="#">Deep Dropdown 1</a></li>
                  <li><a href="#">Deep Dropdown 2</a></li>
@@ -22,14 +22,13 @@
                  <li><a href="#">Deep Dropdown 4</a></li>
                  <li><a href="#">Deep Dropdown 5</a></li>
                </ul>
-             </li>
+             </li> -->
            </ul>
          </li>
-         <li><a href="services.html">Services</a></li>
+         <li><a href="?page=resume">Resume</a></li>
+         <li><a href="?page=services">Services</a></li>
          <li><a href="?page=portofolio">Portfolio</a></li>
-         <li><a href="pricing.html">Pricing</a></li>
-         <li><a href="?page=blog">Blog</a></li>
-         <li><a href="contact.html">Contact</a></li>
+         <li><a href="?page=contact">Contact</a></li>
        </ul>
        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
      </nav>

@@ -70,6 +70,7 @@ if (isset($_POST['simpan'])) {
 
                     <form action="" method="post" enctype="multipart/form-data">
 
+                     
                         <div class="mb-3">
                             <label>Nama</label>
                             <input type="text" class="form-control" name="stat_name" required value="<?= $rowEdit['stat_name'] ?? '' ?>">

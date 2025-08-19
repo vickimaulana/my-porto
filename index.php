@@ -20,6 +20,12 @@ $rowTestimonials  = mysqli_fetch_assoc($queryTestimonials);
 //fakta
 $queryFacts = mysqli_query($koneksi, "SELECT * FROM facts ORDER BY id DESC");
 $rowFacts  = mysqli_fetch_assoc($queryFacts);
+
+//Resume
+$queryResumes = mysqli_query($koneksi, "SELECT * FROM resumes ORDER BY id DESC");
+$rowResumes  = mysqli_fetch_assoc($queryResumes);
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -93,6 +99,9 @@ $rowFacts  = mysqli_fetch_assoc($queryFacts);
   <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
   <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
   <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+
+  <!-- PureCounter Vanilla -->
+   <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
