@@ -31,10 +31,10 @@ if (isset($_POST['simpan'])) {
     $content = $_POST['content'];
     $client_name = $_POST['client_name'];
     $project_date = $_POST['project_date'];
-    $project_url= $_POST['project_url'];
+    $project_url = $_POST['project_url'];
     $is_active = $_POST['is_active'];
     $id_category = $_POST['id_category'];
-  
+
 
     if (!empty($_FILES['image']['name'])) {
         $image = $_FILES['image']['name'];
@@ -60,7 +60,7 @@ if (isset($_POST['simpan'])) {
         }
         $update = "UPDATE portofolios SET title='$title', content='$content', is_active='$is_active', image='$image_name', client_name='$client_name', id_category='$id_category', project_date='$project_date', project_url='$project_url' WHERE id='$id'";
         // dengan gambar
-    }else{
+    } else {
         $update = "UPDATE portofolios SET title='$title', content='$content', is_active='$is_active', client_name='$client_name', id_category='$id_category', project_date='$project_date', project_url='$project_date' WHERE id='$id'";
         // tanpa gambar
     }
@@ -81,8 +81,8 @@ if (isset($_POST['simpan'])) {
     }
 }
 
-$queryCategories = mysqli_query($koneksi, "SELECT * FROM categories WHERE type='portofolios' ORDER BY id ASC");
-$rowCategories   = mysqli_fetch_all($queryCategories, MYSQLI_ASSOC);
+// $queryCategories = mysqli_query($koneksi, "SELECT * FROM categories WHERE type='portofolios' ORDER BY id ASC");
+// $rowCategories   = mysqli_fetch_all($queryCategories, MYSQLI_ASSOC);
 
 ?>
 
@@ -95,10 +95,10 @@ $rowCategories   = mysqli_fetch_all($queryCategories, MYSQLI_ASSOC);
 <section class="section">
     <form action="" method="post" enctype="multipart/form-data">
         <div class="row">
-         <div class="col-lg-8">
+            <div class="col-lg-8">
                 <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title"><?php echo $title ?></h5>
+                    <div class="card-body">
+                        <h5 class="card-title"><?php echo $title ?></h5>
                         <div class="mb-3">
                             <label for="" class="form-label">Gambar</label>
                             <input type="file"
@@ -107,13 +107,13 @@ $rowCategories   = mysqli_fetch_all($queryCategories, MYSQLI_ASSOC);
                         </div>
                         <div class="mb-3">
                             <label for="" class="form-label">Kategori</label>
-                            <select name="id_category" id="" class="form-control" required>
+                            <select name="id_category" class="form-control" required>
                                 <option value="">Pilih Kategori</option>
-                            <?php foreach($rowCategories as $rowCategories):?>                            
-                                <option value="<?php echo $rowCategories['id']?>"><?php echo $rowCategories['name']?></option>
-                            <?php endforeach ?>                            
+                                <option value="IT" <?= (isset($rowEdit['id_category']) && $rowEdit['id_category'] == 'IT') ? 'selected' : '' ?>>IT</option>
+                                <option value="Bisnis" <?= (isset($rowEdit['id_category']) && $rowEdit['id_category'] == 'Bisnis') ? 'selected' : '' ?>>Bisnis</option>
                             </select>
                         </div>
+
                         <div class="mb-3">
                             <label for="" class="form-label">Judul</label>
                             <input type="text" class="form-control" name="title" placeholder="Masukkan judul portofolio"
@@ -125,41 +125,41 @@ $rowCategories   = mysqli_fetch_all($queryCategories, MYSQLI_ASSOC);
                         </div>
                         <div class="mb-3">
                             <label for="" class="form-label">Nama Client</label>
-                            <input type="text"  name="client_name" class="form-control" value="<?php echo ($id) ? $rowEdit['client_name']: ''?>">
+                            <input type="text" name="client_name" class="form-control" value="<?php echo ($id) ? $rowEdit['client_name'] : '' ?>">
                         </div>
                         <div class="mb-3">
                             <label for="" class="form-label">Tanggal Projek</label>
-                            <input type="date"  name="project_date" class="form-control" value="<?php echo ($id) ? $rowEdit['project_date']: ''?>">
+                            <input type="date" name="project_date" class="form-control" value="<?php echo ($id) ? $rowEdit['project_date'] : '' ?>">
                         </div>
                         <div class="mb-3">
                             <label for="" class="form-label">URL Projek</label>
-                            <input type="text"  name="project_url" class="form-control" value="<?php echo ($id) ? $rowEdit['project_url']: ''?>">
+                            <input type="text" name="project_url" class="form-control" value="<?php echo ($id) ? $rowEdit['project_url'] : '' ?>">
                         </div>
+                    </div>
+
                 </div>
-                
-            </div>
-            <div class="col-sm-4">
-                
-                <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title"><?php echo $title ?></h5>
-                        <div class="mb-3">
-                            <label for="" class="form-label">Status</label>
-                            <select name="is_active" id="" class="form-control">
-                                <option <?php echo ($id) ? $rowEdit['is_active'] == 1 ? 'selected' : '' : '' ?> value="1">Publish</option>
-                                <option <?php echo ($id) ? $rowEdit['is_active'] == 0 ? 'selected' : '' : '' ?> value="0">Draft</option>
-                            </select>
+                <div class="col-sm-4">
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title"><?php echo $title ?></h5>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Status</label>
+                                <select name="is_active" id="" class="form-control">
+                                    <option <?php echo ($id) ? $rowEdit['is_active'] == 1 ? 'selected' : '' : '' ?> value="1">Publish</option>
+                                    <option <?php echo ($id) ? $rowEdit['is_active'] == 0 ? 'selected' : '' : '' ?> value="0">Draft</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <button class="btn btn-primary" type="submit" name="simpan">Simpan</button>
+                                <a href="?page=blog" class="text-muted">Kembali</a>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <button class="btn btn-primary" type="submit" name="simpan">Simpan</button>
-                            <a href="?page=blog" class="text-muted">Kembali</a>
-                        </div>
+                    </div>
+
                 </div>
+
             </div>
-            
-        </div>
-        
-        </div>
     </form>
-    
+
 </section>

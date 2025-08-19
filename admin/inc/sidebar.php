@@ -40,23 +40,23 @@
           </a>
         </li>
         <li>
-          <a href="?page=portofolio">
-            <i class="bi bi-circle"></i><span>Portofolio</span>
-          </a>
-        </li>
-        <li>
           <a href="?page=resume">
             <i class="bi bi-circle"></i><span>Resume</span>
           </a>
         </li>
         <li>
-          <a href="components-list-group.html">
-            <i class="bi bi-circle"></i><span>List group</span>
+          <a href="?page=service">
+            <i class="bi bi-circle"></i><span>Service</span>
           </a>
         </li>
         <li>
-          <a href="components-modal.html">
-            <i class="bi bi-circle"></i><span>Modal</span>
+          <a href="?page=portofolio">
+            <i class="bi bi-circle"></i><span>Portofolio</span>
+          </a>
+        </li>
+        <li>
+          <a href="?page=contact">
+            <i class="bi bi-circle"></i><span>Contact</span>
           </a>
         </li>
         <li>
