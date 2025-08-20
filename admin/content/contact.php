@@ -13,13 +13,13 @@ $rows = mysqli_fetch_all($query, MYSQLI_ASSOC);
     <div class="row">
         <div class="col-lg-12">
 
-            <div class="card">
+            <div class="card" >
                 <div class="card-body">
                     <h5 class="card-title">Data Contact</h5>
                     <div class="mb-3" align="right">
                         <a href="?page=tambah-contact" class="btn btn-primary">Tambah</a>
                     </div>
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" >
                         <thead>
                             <tr class="text-center">
                                 <th>No</th>

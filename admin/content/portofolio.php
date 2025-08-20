@@ -56,7 +56,7 @@ function changeIsActive($isActive)
                                     <tr>
                                         <td><?= $i + 1 ?></td>
                                         <td><img src="uploads/<?= $row['image'] ?>" alt="" width="100"></td>
-                                        <td><?= $row['category_name'] ?></td>
+                                        <td><?= $row['id_category'] ?></td>
                                         <td><?= $row['title'] ?></td>
                                         <td><?= changeIsActive($row['is_active']) ?></td>
                                         <td>

@@ -23,17 +23,38 @@ if (isset($_GET['delete'])) {
 // Jika simpan (insert / update)
 if (isset($_POST['simpan'])) {
     $title       = $_POST['title'];
-    $icon        = $_POST['icon'];
     $description = $_POST['description'];
     $link        = $_POST['link'];
+
+    // default icon pakai data lama kalau edit
+    $icon = $rowEdit['icon'] ?? '';
+
+    // jika ada upload file baru
+    if (!empty($_FILES['icon_file']['name'])) {
+        $uploadDir = "uploads/services/";
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        $fileName = time() . "-" . basename($_FILES['icon_file']['name']);
+        $target   = $uploadDir . $fileName;
+
+        if (move_uploaded_file($_FILES['icon_file']['tmp_name'], $target)) {
+            // hapus file lama kalau ada dan berbeda
+            if (!empty($rowEdit['icon']) && file_exists($uploadDir . $rowEdit['icon'])) {
+                unlink($uploadDir . $rowEdit['icon']);
+            }
+            $icon = $fileName;
+        }
+    }
 
     if ($id) {
         // Update data
         $update = mysqli_query($koneksi, "
             UPDATE services SET 
-                title='$title', 
-                icon='$icon', 
-                description='$description', 
+                title='$title',
+                icon='$icon',
+                description='$description',
                 link='$link'
             WHERE id='$id'
         ");
@@ -66,37 +87,35 @@ if (isset($_POST['simpan'])) {
                 <div class="card-body">
                     <h5 class="card-title"><?= $judulPage ?></h5>
 
-                    <form action="" method="post">
+                    <!-- form perlu enctype multipart -->
+                    <form action="" method="post" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label>Judul Service</label>
-                            <input type="text" class="form-control" name="title" required value="<?= $rowEdit['title'] ?? '' ?>">
+                            <input type="text" class="form-control" name="title" required 
+                                   value="<?= $rowEdit['title'] ?? '' ?>">
                         </div>
 
                         <div class="mb-3">
-                            <label>Icon + Warna</label>
-                            <div class="input-group">
-                                <!-- Input icon -->
-                                <input type="text" class="form-control" name="icon"
-                                    placeholder="contoh: bi-code-slash"
-                                    required value="<?= $rowEdit['icon'] ?? '' ?>">
-
-                                <!-- Input warna -->
-                                <input type="color" class="form-control form-control-color"
-                                    name="icon_color"
-                                    value="<?= $rowEdit['icon_color'] ?? '#000000' ?>"
-                                    title="Pilih Warna">
-                            </div>
-                            <small class="text-muted">Gunakan class icon Bootstrap/FontAwesome, lalu pilih warna.</small>
+                            <label>Icon (Upload Gambar)</label>
+                            <input type="file" class="form-control" name="icon_file" accept="image/*">
+                            <?php if (!empty($rowEdit['icon'])): ?>
+                                <div class="mt-2">
+                                    <img src="uploads/services/<?= $rowEdit['icon'] ?>" alt="icon" width="80">
+                                </div>
+                            <?php endif; ?>
+                            <small class="text-muted">Format: JPG, PNG, SVG. Ukuran disarankan kecil (max 2MB).</small>
                         </div>
-
 
                         <div class="mb-3">
                             <label>Deskripsi</label>
-                            <textarea name="description" id="summernote" rows="5" class="form-control"><?php echo $id ? htmlspecialchars($rowEdit['description']) : ''; ?></textarea>
+                            <textarea name="description" id="summernote" rows="5" class="form-control"><?= $rowEdit['description'] ?? '' ?></textarea>
                         </div>
+
                         <div class="mb-3">
                             <label>Link (Opsional)</label>
-                            <input type="text" class="form-control" name="link" value="<?= $rowEdit['link'] ?? '' ?>" placeholder="https://contoh.com">
+                            <input type="text" class="form-control" name="link" 
+                                   value="<?= $rowEdit['link'] ?? '' ?>" 
+                                   placeholder="https://contoh.com">
                         </div>
 
                         <div class="mb-3">

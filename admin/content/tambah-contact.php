@@ -3,7 +3,7 @@
 $id = isset($_GET['edit']) ? $_GET['edit'] : '';
 if (isset($_GET['edit'])) {
     $id = $_GET['edit'];
-    $query = mysqli_query($koneksi, "SELECT * FROM contact WHERE id ='$id'");
+    $query = mysqli_query($koneksi, "SELECT * FROM contacts WHERE id ='$id'");
     $rowEdit = mysqli_fetch_assoc($query);
     $title = "Edit Contact";
 } else {
@@ -13,7 +13,7 @@ if (isset($_GET['edit'])) {
 if (isset($_GET['delete'])) {
     $id = $_GET['delete'];
 
-    $delete = mysqli_query($koneksi, "DELETE FROM contact WHERE id='$id'");
+    $delete = mysqli_query($koneksi, "DELETE FROM contacts WHERE id='$id'");
     if ($delete) {
         header("location:?page=contact&tambah=berhasil");
     }
@@ -53,13 +53,13 @@ if (isset($_POST['simpan'])) {
     //ini query update
     if ($id) {
 
-        $update = mysqli_query($koneksi, "UPDATE contact SET phone='$phone', description='$description', address='$address', email='$email' WHERE id='$id'");
+        $update = mysqli_query($koneksi, "UPDATE contacts SET phone='$phone', description='$description', address='$address', email='$email' WHERE id='$id'");
         if ($update) {
             header("location:?page=contact&ubah=berhasil");
         }
     } else {
 
-        $insert = mysqli_query($koneksi, "INSERT INTO contact (phone, description, address,email)
+        $insert = mysqli_query($koneksi, "INSERT INTO contacts (phone, description, address,email)
         VALUES('$phone', '$description', '$address', '$email')");
         if ($insert) {
             header("location:?page=contact&tambah=berhasil");
@@ -90,10 +90,24 @@ if (isset($_POST['simpan'])) {
                                 class="form-control"><?php echo ($id) ? $rowEdit['description'] : '' ?></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="address">Address</label>
-                            <input type="url" name="address" class="form-control"
-                                placeholder="Tempel link dari Google Maps" required value="<?php echo ($id) ? $rowEdit['address'] : '' ?>">
+                             <label for="address">Address</label>
+                                  <input type="url" name="address" class="form-control"
+                                      placeholder="Tempel link dari Google Maps" required
+                                    value="<?php echo ($id) ? $rowEdit['address'] : '' ?>">
                         </div>
+
+<?php if (!empty($rowEdit['address'])): ?>
+    <div class="mt-3">
+        <label>Peta Lokasi</label>
+        <div class="ratio ratio-16x9">
+            <iframe 
+                src="<?php echo $rowEdit['address']; ?>" 
+                width="100%" height="400" style="border:0;" 
+                allowfullscreen="" loading="lazy">
+            </iframe>
+        </div>
+    </div>
+<?php endif; ?>
 
                         <div class="mb-3">
                             <label for="">Phone</label>

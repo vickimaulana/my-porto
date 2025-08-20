@@ -1,188 +1,157 @@
 <?php
-//  jika data setting sudah ada maka update data tersebut
-// selain itu kalo blm ada maka insert data
-$querySetting = mysqli_query($koneksi, "SELECT * FROM settings LIMIT 1");
-$row = mysqli_fetch_assoc($querySetting);
+// Koneksi database
+include "koneksi.php";
 
+// Ambil data pertama dari tabel settings (jika ada)
+$query  = mysqli_query($koneksi, "SELECT * FROM settings LIMIT 1");
+$row    = mysqli_fetch_assoc($query);
+
+// Fungsi upload gambar
 function uploadImage($file, $row = [], $field = 'logo', $uploadDir = "uploads/")
 {
-    // Pastikan ada file yang diupload
     if (!empty($file['name'])) {
-        // Buat folder kalau belum ada
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true);
         }
 
-        // Buat nama unik (timestamp + nama asli)
         $fileName   = time() . "-" . basename($file['name']);
         $targetFile = $uploadDir . $fileName;
 
-        // Upload file
         if (move_uploaded_file($file['tmp_name'], $targetFile)) {
-            // Hapus file lama kalau ada
+            // Hapus file lama jika ada
             if (!empty($row[$field]) && file_exists($uploadDir . $row[$field])) {
                 unlink($uploadDir . $row[$field]);
             }
-
-            return $fileName; // kembalikan nama file baru
+            return $fileName;
         }
     }
-
-    return $row[$field] ?? null; // kalau tidak upload, pakai nama lama
+    return $row[$field] ?? null; // Jika tidak upload baru → pakai lama
 }
 
-
+// Proses simpan data
 if (isset($_POST['simpan'])) {
-    $email    = $_POST['email'];
-    $phone    = $_POST['phone'];
-    $address  = $_POST['address'];
-    $ig       = $_POST['instagram'];
-    $fb       = $_POST['facebook'];
-    $twitter  = $_POST['twitter'];
-    $linkedin = $_POST['linkedin'];
+    $email    = mysqli_real_escape_string($koneksi, $_POST['email']);
+    $phone    = mysqli_real_escape_string($koneksi, $_POST['phone']);
+    $address  = mysqli_real_escape_string($koneksi, $_POST['address']);
+    $ig       = mysqli_real_escape_string($koneksi, $_POST['instagram']);
+    $fb       = mysqli_real_escape_string($koneksi, $_POST['facebook']);
+    $twitter  = mysqli_real_escape_string($koneksi, $_POST['twitter']);
+    $linkedin = mysqli_real_escape_string($koneksi, $_POST['linkedin']);
 
-    // Gunakan fungsi upload
+    // Upload file (logo & image)
     $logo_name = uploadImage($_FILES['logo'], $row, 'logo');
     $image_bg  = uploadImage($_FILES['image'], $row, 'image');
 
-    if ($row) {
-        // update
+    if (!empty($row)) {
+        // UPDATE
         $id_setting = $row['id'];
-        $update = mysqli_query($koneksi, "UPDATE settings 
-                    SET email='$email', 
-                        phone='$phone', 
-                        logo='$logo_name', 
-                        image='$image_bg', 
-                        address='$address', 
-                        ig='$ig', 
-                        fb='$fb', 
-                        twitter='$twitter', 
-                        linkedin='$linkedin' 
-                    WHERE id='$id_setting'");
+        $update = mysqli_query($koneksi, "UPDATE settings SET 
+                        email    = '$email',
+                        phone    = '$phone',
+                        address  = '$address',
+                        logo     = '$logo_name',
+                        image    = '$image_bg',
+                        twitter  = '$twitter',
+                        fb       = '$fb',
+                        ig       = '$ig',
+                        linkedin = '$linkedin'
+                    WHERE id = '$id_setting'");
+
         if ($update) {
-            header("location:?page=setting&ubah=berhasil");
+            header("Location: ?page=setting&ubah=berhasil");
             exit;
         }
     } else {
-        // insert
+        // INSERT
         $insert = mysqli_query($koneksi, "INSERT INTO settings 
-                (email, phone, logo, image, address, ig, fb, twitter, linkedin) 
+                    (email, phone, address, logo, image, twitter, fb, ig, linkedin) 
                 VALUES 
-                ('$email','$phone','$logo_name','$image_bg','$address','$ig','$fb','$twitter','$linkedin')");
+                    ('$email','$phone','$address','$logo_name','$image_bg','$twitter','$fb','$ig','$linkedin')");
+
         if ($insert) {
-            header("location:?page=setting&tambah=berhasil");
+            header("Location: ?page=setting&tambah=berhasil");
             exit;
         }
     }
 }
 ?>
 
-
+<!-- ====== FORM INPUT SETTINGS ====== -->
 <div class="pagetitle">
-    <h1>Pengaturan</h1>
-</div><!-- End Page Title -->
+  <h1>Pengaturan Website</h1>
+</div>
 
 <section class="section">
-    <div class="row">
-        <div class="col-lg-12">
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Form Pengaturan</h5>
 
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Pengaturan</h5>
-                    <form action="" method="post" enctype="multipart/form-data">
-                        <!-- Email -->
-                        <div class="mb-3 row">
-                            <div class="col-sm-2">
-                                <label for="" class="form-label fw-bold">Email</label>
-                            </div>
-                            <div class="col-sm-10">
-                                <input type="email" name="email" id="" class="form-control" value="<?php echo isset($row['email']) ? $row['email'] : '' ?>">
-                            </div>
-                        </div>
-                        <!-- Phone -->
-                        <div class="mb-3 row">
-                            <div class="col-sm-2">
-                                <label for="" class="form-label fw-bold">No Telp</label>
-                            </div>
-                            <div class="col-sm-10">
-                                <input type="number" name="phone" id="" class="form-control" value="<?php echo isset($row['phone']) ? $row['phone'] : '' ?>">
-                            </div>
-                        </div>
-                        <!-- Address -->
-                        <div class="mb-3 row">
-                            <div class="col-sm-2">
-                                <label for="" class="form-label fw-bold">Alamat</label>
-                            </div>
-                            <div class="col-sm-10">
-                                <textarea name="address" id="" class="form-control"><?php echo isset($row['address']) ? $row['address'] : '' ?></textarea>
-                            </div>
-                        </div>
-                        <!-- Logo -->
-                        <div class="mb-3 row">
-                            <div class="col-sm-2">
-                                <label for="" class="form-label fw-bold">Logo</label>
-                            </div>
-                            <div class="col-sm-10">
-                                <input type="file" name="logo"><img class='mt-2' src="uploads/<?php echo isset($row['logo']) ? $row['logo'] : '' ?>" alt="logo" width="100" class="form-control">
-                            </div>
-                        </div>
-                         <!-- Background Image -->
-                        <div class="mb-3 row">
-                            <div class="col-sm-2">
-                                <label for="" class="form-label fw-bold">Background Image</label>
-                            </div>
-                            <div class="col-sm-10">
-                                <input type="file" name="image"><img class='mt-2' src="uploads/<?php echo isset($row['image']) ? $row['image'] : '' ?>" alt="bg-image" width="100" class="form-control">
-                            </div>
-                        </div>
-                        <!-- Twitter -->
-                        <div class="mb-3 row">
-                            <div class="col-sm-2">
-                                <label for="" class="form-label fw-bold">Twitter</label>
-                            </div>
-                            <div class="col-sm-10">
-                                <input type="url" name="twitter" id="" class="form-control" value="<?php echo isset($row['twitter']) ? $row['twitter'] : '' ?>">
-                            </div>
-                        </div>
-                        <!-- Facebook -->
-                        <div class="mb-3 row">
-                            <div class="col-sm-2">
-                                <label for="" class="form-label fw-bold">Facebook</label>
-                            </div>
-                            <div class="col-sm-10">
-                                <input type="url" name="facebook" id="" class="form-control" value="<?php echo isset($row['fb']) ? $row['fb'] : '' ?>">
-                            </div>
-                        </div>
-                        <!-- Instagram -->
-                        <div class="mb-3 row">
-                            <div class="col-sm-2">
-                                <label for="" class="form-label fw-bold">Instagram</label>
-                            </div>
-                            <div class="col-sm-10">
-                                <input type="url" name="instagram" id="" class="form-control" value="<?php echo isset($row['ig']) ? $row['ig'] : '' ?>">
-                            </div>
-                        </div>
-                        <!-- LinkedIn -->
-                        <div class="mb-3 row">
-                            <div class="col-sm-2">
-                                <label for="" class="form-label fw-bold">LinkedIn</label>
-                            </div>
-                            <div class="col-sm-10">
-                                <input type="url" name="linkedin" id="" class="form-control" value="<?php echo isset($row['linkedin']) ? $row['linkedin'] : '' ?>">
-                            </div>
-                        </div>
-                        <!-- tombol simpan -->
-                        <div class="mb-3 row">
-                            <div class="col-sm-2">
-                                <button class="btn btn-primary" name="simpan">Simpan</button>
-                                <a href="?page=setting" class="text-muted">Kembali</a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+          <form method="POST" enctype="multipart/form-data">
+
+            <div class="mb-3">
+              <label>Email</label>
+              <input type="email" name="email" class="form-control" 
+                     value="<?= htmlspecialchars($row['email'] ?? '') ?>" required>
             </div>
 
-        </div>
+            <div class="mb-3">
+              <label>Phone</label>
+              <input type="text" name="phone" class="form-control" 
+                     value="<?= htmlspecialchars($row['phone'] ?? '') ?>" required>
+            </div>
 
+            <div class="mb-3">
+              <label>Address</label>
+              <textarea name="address" class="form-control" rows="3" required><?= htmlspecialchars($row['address'] ?? '') ?></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label>Logo</label><br>
+              <?php if (!empty($row['logo'])): ?>
+                <img src="uploads/<?= $row['logo'] ?>" width="100" class="mb-2"><br>
+              <?php endif; ?>
+              <input type="file" name="logo" class="form-control">
+            </div>
+
+            <div class="mb-3">
+              <label>Background Image</label><br>
+              <?php if (!empty($row['image'])): ?>
+                <img src="uploads/<?= $row['image'] ?>" width="150" class="mb-2"><br>
+              <?php endif; ?>
+              <input type="file" name="image" class="form-control">
+            </div>
+
+            <div class="mb-3">
+              <label>Facebook</label>
+              <input type="text" name="facebook" class="form-control" 
+                     value="<?= htmlspecialchars($row['fb'] ?? '') ?>">
+            </div>
+
+            <div class="mb-3">
+              <label>Instagram</label>
+              <input type="text" name="instagram" class="form-control" 
+                     value="<?= htmlspecialchars($row['ig'] ?? '') ?>">
+            </div>
+
+            <div class="mb-3">
+              <label>Twitter</label>
+              <input type="text" name="twitter" class="form-control" 
+                     value="<?= htmlspecialchars($row['twitter'] ?? '') ?>">
+            </div>
+
+            <div class="mb-3">
+              <label>LinkedIn</label>
+              <input type="text" name="linkedin" class="form-control" 
+                     value="<?= htmlspecialchars($row['linkedin'] ?? '') ?>">
+            </div>
+
+            <button type="submit" name="simpan" class="btn btn-primary">Simpan</button>
+          </form>
+
+        </div>
+      </div>
     </div>
+  </div>
 </section>
