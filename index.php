@@ -25,13 +25,15 @@ $rowFacts  = mysqli_fetch_assoc($queryFacts);
 $queryResumes = mysqli_query($koneksi, "SELECT * FROM resumes ORDER BY id DESC");
 $rowResumes  = mysqli_fetch_assoc($queryResumes);
 
+
+
 // //Portofolio
 // $queryPortofolios = mysqli_query($koneksi, "SELECT * FROM portofolios ORDER BY id DESC");
 // $rowPortofolios  = mysqli_fetch_assoc($queryPortofolios);
 
-// //Service
-// $queryServices = mysqli_query($koneksi, "SELECT * FROM services ORDER BY id DESC");
-// $rowServices  = mysqli_fetch_assoc($queryServices);
+//Service
+$queryServices = mysqli_query($koneksi, "SELECT * FROM services ORDER BY id DESC");
+$rowServices  = mysqli_fetch_assoc($queryServices);
 
 // //Contact
 // $queryContacts = mysqli_query($koneksi, "SELECT * FROM contacts ORDER BY id DESC");

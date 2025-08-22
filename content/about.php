@@ -1,5 +1,5 @@
 <?php
-//keahlan
+//keahlian
 $querySkills = mysqli_query($koneksi, "SELECT skills.* FROM skills JOIN users ON users.id = skills.id_user");
 $rowSkills = mysqli_fetch_all($querySkills, MYSQLI_ASSOC);
 //fakta
@@ -30,7 +30,8 @@ $col2 = array_slice($rowSkills, $half);
             <div class="col-lg-4">
                 <img src="admin/uploads/<?= $rowAbout['image'] ?>" class="img-fluid" alt="">
             </div>
-            <div class="col-lg-8 content">
+            <div class="col-lg-8 content text-center justify-content">
+                <h1><?= $rowAbout['name'] ?></h1>
                 <h2><?= $rowAbout['title'] ?></h2>
                 <p class="fst-italic py-3">
                     <?= $rowAbout['description'] ?>

@@ -1,6 +1,6 @@
 <?php
-$queryContact = mysqli_query($koneksi, "SELECT * FROM contacts ORDER BY id DESC");
-$rowContact = mysqli_fetch_assoc($queryContact);
+$queryContacts = mysqli_query($koneksi, "SELECT * FROM contacts ORDER BY id DESC");
+$rowContacts = mysqli_fetch_assoc($queryContacts);
 
 ?>
 

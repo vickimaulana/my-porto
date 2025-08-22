@@ -6,8 +6,8 @@
         <div class="container text-center" data-aos="zoom-out" data-aos-delay="100">
             <div class="row justify-content-center">
                 <div class="col-lg-8">
-                    <h2>Halo Saya Vicki</h2>
-                    <p>Saya Junior Web Programing</p>
+                    <h2><?php echo $rowAbout['name']?></h2>
+                    <p><?php echo $rowAbout['title']?></p>
                     <a href="?page=about" class="btn-get-started">About Me</a>
                 </div>
             </div>
