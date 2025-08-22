@@ -33,7 +33,7 @@ $rowResumes  = mysqli_fetch_assoc($queryResumes);
 
 //Service
 $queryServices = mysqli_query($koneksi, "SELECT * FROM services ORDER BY id DESC");
-$rowServices  = mysqli_fetch_assoc($queryServices);
+$rowServices  = mysqli_fetch_all($queryServices, MYSQLI_ASSOC);
 
 // //Contact
 // $queryContacts = mysqli_query($koneksi, "SELECT * FROM contacts ORDER BY id DESC");
