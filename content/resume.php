@@ -3,11 +3,20 @@
 $queryResumes = mysqli_query($koneksi, "SELECT * FROM resumes ORDER BY start_year DESC");
 $rowResumes   = mysqli_fetch_all($queryResumes, MYSQLI_ASSOC);
 
-// Kelompokkan data sesuai type
-$nonformal    = array_filter($rowResumes, fn($r) => strtolower($r['type']) === 'nonformal');
-$education  = array_filter($rowResumes, fn($r) => strtolower($r['type']) === 'education');
-$experience = array_filter($rowResumes, fn($r) => strtolower($r['type']) === 'experience');
-$certification = array_filter($rowResumes, fn($r) => strtolower($r['type']) === 'certification');
+
+// Kelompokkan data sesuai type (pakai function biasa, bukan fn())
+$nonformal = array_filter($rowResumes, function ($r) {
+  return strtolower($r['type']) === 'nonformal';
+});
+$education = array_filter($rowResumes, function ($r) {
+  return strtolower($r['type']) === 'education';
+});
+$experience = array_filter($rowResumes, function ($r) {
+  return strtolower($r['type']) === 'experience';
+});
+$certification = array_filter($rowResumes, function ($r) {
+  return strtolower($r['type']) === 'certification';
+});
 ?>
 
 <section id="resume" class="resume section">
@@ -65,13 +74,13 @@ $certification = array_filter($rowResumes, fn($r) => strtolower($r['type']) === 
             </div>
           <?php endforeach; ?>
         <?php endif; ?>
-            <!-- Sertifikasi-->
+        <!-- Sertifikasi-->
         <?php if (!empty($certification)): ?>
           <h3 class="resume-title">Sertifikasi</h3>
           <?php foreach ($certification as $exp): ?>
             <div class="resume-item">
               <h4><?= htmlspecialchars($exp['title']) ?></h4>
-              <h5><?= htmlspecialchars($exp['start_year']) ?>  <?= htmlspecialchars($exp['end_year']) ?></h5>
+              <h5><?= htmlspecialchars($exp['start_year']) ?> <?= htmlspecialchars($exp['end_year']) ?></h5>
               <p><em><?= htmlspecialchars($exp['institution']) ?></em></p>
               <p><?= nl2br(htmlspecialchars($exp['description'])) ?></p>
             </div>

@@ -1,9 +1,7 @@
 <?php
 $queryContacts = mysqli_query($koneksi, "SELECT * FROM contacts ORDER BY id DESC");
 $rowContacts = mysqli_fetch_assoc($queryContacts);
-
 ?>
-
 
 <main class="main">
 
@@ -13,7 +11,7 @@ $rowContacts = mysqli_fetch_assoc($queryContacts);
         <!-- Section Title -->
         <div class="container section-title" data-aos="fade-up">
             <h2>Contact</h2>
-            <p><?php echo $rowContact['description'] ?></p>
+            <p><?php echo $rowContacts['description'] ?></p>
         </div><!-- End Section Title -->
 
         <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -23,35 +21,49 @@ $rowContacts = mysqli_fetch_assoc($queryContacts);
                 <div class="col-lg-5">
 
                     <div class="info-wrap">
+
+                        <!-- Address -->
                         <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="200">
                             <i class="bi bi-geo-alt flex-shrink-0"></i>
                             <div>
                                 <h3>Address</h3>
-                                <p><?php echo $rowContact['address'] ?><iframe></p>
+                                <p><?php echo $rowContacts['address'] ?></p>
                             </div>
                         </div><!-- End Info Item -->
 
+                        <!-- Phone -->
                         <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="300">
                             <i class="bi bi-telephone flex-shrink-0"></i>
                             <div>
                                 <h3>Call Us</h3>
-                                <p><?php echo $rowContact['phone'] ?> </p>
+                                <p><?php echo $rowContacts['phone'] ?></p>
                             </div>
                         </div><!-- End Info Item -->
 
+                        <!-- Email -->
                         <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
                             <i class="bi bi-envelope flex-shrink-0"></i>
                             <div>
                                 <h3>Email Us</h3>
-                                <p><?php echo $rowContact['email'] ?> </p>
+                                <p><?php echo $rowContacts['email'] ?></p>
                             </div>
                         </div><!-- End Info Item -->
 
-                        <iframe src=""></iframe>
+                        <!-- Map Embed -->
+                        <?php if (!empty($rowContacts['map_embed'])): ?>
+                            <div class="info-item" data-aos="fade-up" data-aos-delay="500">
+                                <h3>Find Us</h3>
+                                <div style="border-radius:8px; overflow:hidden;">
+                                    <?= $rowContacts['map_embed'] ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
 
-                    </div>
+                    </div><!-- End info-wrap -->
+
                 </div>
 
+                <!-- Contact Form -->
                 <div class="col-lg-7">
                     <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
                         <div class="row gy-4">

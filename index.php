@@ -1,6 +1,9 @@
 <?php
 include 'admin/koneksi.php';
 
+
+
+
 // about
 $queryAbout = mysqli_query($koneksi, "SELECT * FROM about ORDER BY id DESC");
 $rowAbout  = mysqli_fetch_assoc($queryAbout);
@@ -24,6 +27,10 @@ $rowFacts  = mysqli_fetch_assoc($queryFacts);
 //Resume
 $queryResumes = mysqli_query($koneksi, "SELECT * FROM resumes ORDER BY id DESC");
 $rowResumes  = mysqli_fetch_assoc($queryResumes);
+
+//Contact
+$queryContacts = mysqli_query($koneksi, "SELECT * FROM contacts ORDER BY id DESC");
+$rowContacts = mysqli_fetch_assoc($queryContacts);
 
 
 
@@ -116,7 +123,7 @@ $rowServices  = mysqli_fetch_all($queryServices, MYSQLI_ASSOC);
   <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
 
   <!-- PureCounter Vanilla -->
-   <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>

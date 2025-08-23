@@ -3,6 +3,7 @@
      <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
        <!-- Uncomment the line below if you also wish to use an image logo -->
        <img src="admin/uploads/<?php echo $rowSetting['logo'] ?>" width="500%" alt="">
+       <h1>Vicki</h1>
        <!-- <h1 class="sitename">Company</h1><span>.</span> -->
      </a>
 
@@ -33,10 +34,10 @@
      </nav>
 
      <div class="header-social-links">
-     <a href="<?php echo $rowSetting['twitter']?>"><i class="bi bi-twitter-x"></i></a>
-        <a href="<?php echo $rowSetting['fb']?>"><i class="bi bi-facebook"></i></a>
-        <a href="<?php echo $rowSetting['ig']?>"><i class="bi bi-instagram"></i></a>
-        <a href="<?php echo $rowSetting['linkedin']?>"><i class="bi bi-linkedin"></i></a>
+       <a href="<?php echo $rowSetting['twitter'] ?>"><i class="bi bi-twitter-x"></i></a>
+       <a href="<?php echo $rowSetting['fb'] ?>"><i class="bi bi-facebook"></i></a>
+       <a href="<?php echo $rowSetting['ig'] ?>"><i class="bi bi-instagram"></i></a>
+       <a href="<?php echo $rowSetting['linkedin'] ?>"><i class="bi bi-linkedin"></i></a>
      </div>
 
    </div>
