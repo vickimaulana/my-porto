@@ -1,57 +1,127 @@
-<body class="portfolio-page">
+<?php
+// Query data portofolio
+$query = mysqli_query($koneksi, "SELECT * FROM portofolios ORDER BY id DESC");
+$rowPortofolio = mysqli_fetch_all($query, MYSQLI_ASSOC);
 
+// Helper slugify
+function slugify($text)
+{
+    $text = preg_replace('~[^\pL\d]+~u', '-', $text);
+    $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+    $text = preg_replace('~[^-\w]+~', '', $text);
+    $text = trim($text, '-');
+    $text = preg_replace('~-+~', '-', $text);
+    return strtolower($text ?: 'n-a');
+}
+?>
 
+<!-- ====== Portfolio Section ====== -->
+<section id="portfolio" class="portfolio section py-5">
 
-    <main class="main">
+    <div class="container" data-aos="fade-up">
+        <h2 class="mb-4 text-center ">Portofolio</h2>
+        <p class="mb-4 text-center">Ini portofolio yang sudah saya kerjakan.</p>
+        <!-- Filter Buttons -->
+        <ul class="portfolio-filters list-inline mb-4 text-center">
+            <li class="list-inline-item filter-active" data-filter="*">All</li>
+            <?php
+            $categories = array_unique(array_column($rowPortofolio, 'category'));
+            foreach ($categories as $cat):
+                $catSlug = slugify($cat);
+            ?>
+                <li class="list-inline-item" data-filter=".filter-<?= $catSlug ?>"><?= htmlspecialchars($cat) ?></li>
+            <?php endforeach; ?>
+        </ul>
 
-        <!-- Portfolio Section -->
-        <section id="portfolio" class="portfolio section">
+        <!-- Portfolio Grid -->
+        <div class="row gy-4 isotope-container">
+            <?php foreach ($rowPortofolio as $p): ?>
+                <?php
+                $catSlug = slugify($p['category']);
+                $imgFile = !empty($p['image']) ? htmlspecialchars($p['image']) : 'no-image.png';
+                ?>
+                <div class="col-lg-4 col-md-6 isotope-item filter-<?= $catSlug ?>">
+                    <div class="card h-100 shadow-sm border-0">
 
-            <!-- Section Title -->
-            <div class="container section-title" data-aos="fade-up">
-                <h2>Portfolio</h2>
-                <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-            </div><!-- End Section Title -->
+                        <!-- Image -->
+                        <img src="admin/uploads/<?= $imgFile ?>"
+                            class="card-img-top"
+                            alt="<?= htmlspecialchars($p['title']) ?>"
+                            style="height:250px; object-fit:cover; width:100%;">
 
-            <div class="container">
+                        <div class="card-body">
+                            <h5 class="card-title"><?= htmlspecialchars($p['title']) ?></h5>
+                            <p class="card-text small text-muted"><?= htmlspecialchars($p['description']) ?></p>
 
-                <div class="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">
-
-                    <ul class="portfolio-filters isotope-filters" data-aos="fade-up" data-aos-delay="100">
-                        <li data-filter="*" class="filter-active">All</li>
-                        <li data-filter=".filter-app">IT</li>
-                        <li data-filter=".filter-product">Bisnis</l>
-                    </ul><!-- End Portfolio Filters -->
-
-                    <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
-
-                        <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
-                            <img src="assets/img/masonry-portfolio/masonry-portfolio-1.jpg" class="img-fluid" alt="">
-                            <div class="portfolio-info">
-                                <h4>IT</h4>
-                                <p>Lorem ipsum, dolor sit</p>
-                                <a href="assets/img/masonry-portfolio/masonry-portfolio-1.jpg" title="App 1" data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                                <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+                            <!-- Tags -->
+                            <div class="mb-2">
+                                <?php
+                                // Warna badge tanpa 'secondary'
+                                $colors = ['primary', 'success', 'danger', 'warning', 'info', 'dark'];
+                                $tags = !empty($p['tags']) ? explode(',', $p['tags']) : ['No tags'];
+                                foreach ($tags as $tag):
+                                    $tag = trim($tag);
+                                    $color = $colors[array_rand($colors)];
+                                ?>
+                                    <span class="badge bg-<?= $color ?> me-1">#<?= htmlspecialchars($tag) ?></span>
+                                <?php endforeach; ?>
                             </div>
-                        </div><!-- End Portfolio Item -->
 
-                        <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-product">
-                            <img src="assets/img/masonry-portfolio/masonry-portfolio-2.jpg" class="img-fluid" alt="">
-                            <div class="portfolio-info">
-                                <h4>BISNIS</h4>
-                                <p>Lorem ipsum, dolor sit</p>
-                                <a href="assets/img/masonry-portfolio/masonry-portfolio-2.jpg" title="Product 1" data-gallery="portfolio-gallery-product" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                                <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+                            <!-- Footer (Zoom & Link) -->
+                            <div class="d-flex justify-content-between bg-white border-0">
+                                <a href="admin/uploads/<?= $imgFile ?>"
+                                    title="<?= htmlspecialchars($p['title']) ?>"
+                                    data-gallery="portofolio-gallery"
+                                    class="glightbox preview-link">
+                                    <i class="bi bi-zoom-in fs-5"></i>
+                                </a>
+                                <?php if (!empty($p['link'])): ?>
+                                    <a href="<?= htmlspecialchars($p['link']) ?>" target="_blank" rel="noopener" class="details-link text-decoration-none">
+                                        <i class="bi bi-link-45deg fs-5"></i>
+                                    </a>
+                                <?php endif; ?>
                             </div>
-                        </div><!-- End Portfolio Item -->
 
-  
-                    </div><!-- End Portfolio Container -->
-
+                        </div>
+                    </div>
                 </div>
+            <?php endforeach; ?>
+        </div>
 
-            </div>
+    </div>
+</section>
 
-        </section><!-- /Portfolio Section -->
+<!-- ====== CSS Library ====== -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" rel="stylesheet">
 
-    </main>
+<!-- ====== JS Library ====== -->
+<script src="https://cdn.jsdelivr.net/npm/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+
+<script>
+    // Isotope Init
+    document.addEventListener('DOMContentLoaded', function() {
+        let iso = new Isotope('.isotope-container', {
+            itemSelector: '.isotope-item'
+        });
+
+        // Filter buttons
+        document.querySelectorAll('.portfolio-filters li').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelector('.portfolio-filters .filter-active')?.classList.remove('filter-active');
+                this.classList.add('filter-active');
+                let filter = this.getAttribute('data-filter');
+                iso.arrange({
+                    filter: filter
+                });
+            });
+        });
+
+        // GLightbox Init
+        GLightbox({
+            selector: '.glightbox'
+        });
+    });
+</script>
